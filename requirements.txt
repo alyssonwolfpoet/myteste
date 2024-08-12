@@ -1,0 +1,15 @@
+pyplaintext
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+pgvector
+python-dotenv
+pypdf
+pandas
+odfpy
+ollama
+pdfplumber
+python-multipart
+fastembed
+langchain-community
