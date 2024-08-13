@@ -1,5 +1,5 @@
 #from ollama import Ollama
-#from langchain_community.llms import Ollama
+from langchain_community.llms import Ollama
 import ollama
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 from langchain_ollama import OllamaEmbeddings
@@ -11,9 +11,8 @@ load_dotenv()  # Carrega variáveis do arquivo .env
 #ollama = Ollama(api_key=os.getenv("OLLAMA_API_KEY"))
 #embedding = OllamaEmbeddings()
 
-#ollama = Ollama()
-
-embedding = OllamaEmbeddings(model="llama3")
+a = Ollama(model="llama3.1")
+embedding = OllamaEmbeddings(model="llama3.1")
 
 def generate_embedding(text: str) -> list:
     response = embedding.embed_query(text)
@@ -21,5 +20,6 @@ def generate_embedding(text: str) -> list:
     return response
 
 def ask_question(question: str, context: str) -> str:
-    response = ollama.complete(prompt=f"Context: {context}\n\nQuestion: {question}", model="llama3.1")
-    return response['text']
+    response = a(prompt=f"Context: {context}\n\nQuestion: {question}", model="llama3.1")
+    print(response)
+    return response

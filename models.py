@@ -22,6 +22,6 @@ class DocumentEmbedding(Base):
     __tablename__ = "document_embeddings"
     id = Column(Integer, primary_key=True, index=True)
     document_id = Column(Integer)
-    vector = Column(Float)
+    vector = Column(String)
 
 Base.metadata.create_all(bind=engine)

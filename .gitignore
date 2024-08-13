@@ -1,2 +1,6 @@
 .venv
 .env
+__pycache__
+clients/__pycache__
+controllers/__pycache__
+utils/__pycache__
