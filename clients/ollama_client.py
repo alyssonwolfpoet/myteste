@@ -12,11 +12,12 @@ load_dotenv()  # Carrega variáveis do arquivo .env
 #embedding = OllamaEmbeddings()
 
 a = Ollama(model="llama3.1")
-embedding = OllamaEmbeddings(model="llama3.1")
+embedding = OllamaEmbeddings(model="nomic-embed-text")
+
 
 def generate_embedding(text: str) -> list:
     response = embedding.embed_query(text)
-    print(response)
+    #print(response)
     return response
 
 def ask_question(question: str, context: str) -> str:
