@@ -17,6 +17,7 @@ class Document(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     content = Column(String)
+    curso_id = Column(Integer)
 
 class DocumentEmbedding(Base):
     __tablename__ = "document_embeddings"
@@ -24,4 +25,25 @@ class DocumentEmbedding(Base):
     document_id = Column(Integer)
     vector = Column(String)
 
+class Curso(Base):
+    __tablename__ = "cursos"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    vector = Column(String)
+
+class Modulo_curso(Base):
+    __tablename__ = "modulo_curso"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    curso_id = Column(Integer)
+
+class Trascricao(Base):
+    __tablename__ = "trascricao"
+    id = Column(Integer, primary_key=True, index=True)
+    curso_id = Column(Integer)
+    modelo_id = Column(Integer)
+    content = Column(String)
+    vector = Column(String)
+
+Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
