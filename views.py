@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File,status,HTTPException
+from fastapi import APIRouter, UploadFile, File,status,HTTPException ,Form
 from typing import List
 from controllers.file_processing import process_files
 from controllers.document_queries import ask_about_document
@@ -32,3 +32,31 @@ def generate_quiz_endpoint(document_id: int):
 @router.post("/curso/",response_model=Curso,status_code=200)
 async def test(curso:Curso):
     return curso
+
+class FileUploadData(BaseModel):
+    cursoname: str
+    modulo: str
+
+async def process_filesteste(files: List[UploadFile], cursoname: str, modulo: str) -> dict:
+    results = []
+    for file in files:
+        content = await file.read()
+        results.append({
+            "filename": file.filename,
+            "content_size": len(content),
+            "cursoname": cursoname,
+            "modulo": modulo
+        })
+    return {"processed_files": results}
+
+@router.post("/curso2/")
+async def curse2(
+    cursoname: str = Form(...),
+    modulo: str = Form(...),
+    files: List[UploadFile] = File(...)
+):
+    if not files:
+        raise HTTPException(status_code=400, detail="Nenhum arquivo enviado.")
+    
+    response = await process_filesteste(files, cursoname, modulo)
+    return response
