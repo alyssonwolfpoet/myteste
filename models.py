@@ -16,8 +16,8 @@ class Document(Base):
     __tablename__ = "documents"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
-    content = Column(String)
     modulo_id = Column(Integer)
+    content = Column(String)
 
 class DocumentEmbedding(Base):
     __tablename__ = "document_embeddings"
@@ -42,9 +42,9 @@ class Trascricao(Base):
     id = Column(Integer, primary_key=True, index=True)
     curso_id = Column(Integer)
     modelo_id = Column(Integer)
+    uuid = Column(String)
     content = Column(String)
     vector = Column(String)
-    uuid = Column(String)
 
-Base.metadata.drop_all(bind=engine)
+#Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
