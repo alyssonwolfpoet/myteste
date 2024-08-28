@@ -1,6 +1,9 @@
 from sqlalchemy import create_engine, Column, Integer, String, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Mapped
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import mapped_column
 import os
 from dotenv import load_dotenv
 
@@ -16,13 +19,13 @@ class Document(Base):
     __tablename__ = "documents"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
-    modulo_id = Column(Integer)
+    modulo_id = mapped_column(ForeignKey("modulo_curso.id"))
     content = Column(String)
 
 class DocumentEmbedding(Base):
     __tablename__ = "document_embeddings"
     id = Column(Integer, primary_key=True, index=True)
-    document_id = Column(Integer)
+    document_id = mapped_column(ForeignKey("documents.id"))
     vector = Column(String)
 
 class Curso(Base):
@@ -35,16 +38,16 @@ class Modulo_curso(Base):
     __tablename__ = "modulo_curso"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
-    curso_id = Column(Integer)
+    curso_id = mapped_column(ForeignKey("cursos.id"))
 
 class Trascricao(Base):
     __tablename__ = "trascricao"
     id = Column(Integer, primary_key=True, index=True)
-    curso_id = Column(Integer)
-    modelo_id = Column(Integer)
+    curso_id = mapped_column(ForeignKey("cursos.id"))
+    modelo_id = mapped_column(ForeignKey("modulo_curso.id"))
     uuid = Column(String)
     content = Column(String)
     vector = Column(String)
 
-#Base.metadata.drop_all(bind=engine)
+Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
