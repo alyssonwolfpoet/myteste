@@ -32,7 +32,6 @@ class Curso(Base):
     __tablename__ = "cursos"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
-    vector = Column(String)
 
 class Modulo_curso(Base):
     __tablename__ = "modulo_curso"
@@ -49,5 +48,5 @@ class Trascricao(Base):
     content = Column(String)
     vector = Column(String)
 
-Base.metadata.drop_all(bind=engine)
+#Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)

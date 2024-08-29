@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File,status,HTTPException ,Form
 from typing import List
-from controllers.file_processing import process_files
+from controllers.file_processing import process_files,curso_modulo_up
 from controllers.document_queries import ask_about_document
 from controllers.quiz_generation import generate_quiz
 from pydantic import BaseModel
@@ -59,4 +59,16 @@ async def curse2(
         raise HTTPException(status_code=400, detail="Nenhum arquivo enviado.")
     
     response = await process_filesteste(files, cursoname, modulo)
+    return response
+
+@router.post("/curso3/")
+async def curse2(
+    cursoname: str = Form(...),
+    modulo: str = Form(...),
+    files: List[UploadFile] = File(...)
+):
+    if not files:
+        raise HTTPException(status_code=400, detail="Nenhum arquivo enviado.")
+    
+    response = curso_modulo_up(files, cursoname, modulo)
     return response
