@@ -32,3 +32,7 @@ def get_document_by_id(document_id: int):
     db = SessionLocal()
     return db.query(Document).filter(Document.id == document_id).first()
 
+def get_curso_by_name(namecurso):
+    db = SessionLocal()
+    return db.query(Curso).filter(Curso.name == namecurso).first()
+

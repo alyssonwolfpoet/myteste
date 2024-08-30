@@ -12,3 +12,10 @@ def read_csv(file_path: str) -> str:
 def read_odt(file_path: str) -> str:
     doc = load(file_path)
     return "\n".join(paragraph.firstChild.data for paragraph in doc.text.getElementsByType('p'))
+
+def read_csv2(file_path: str) -> str:
+    a =pd.read_csv(file_path)
+    transcripts = a['transcript']
+    uuids = a['uuid']
+    #return pd.read_csv(file_path)
+    return a

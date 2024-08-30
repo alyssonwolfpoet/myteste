@@ -1,6 +1,6 @@
 from database import save_document, save_embedding , save_curso , save_Modulo_curso
 from clients.ollama_client import generate_embedding
-from utils.file_readers import read_pdf, read_csv, read_odt
+from utils.file_readers import read_pdf, read_csv, read_odt, read_csv2
 
 def process_files(files):
     for file in files:
@@ -35,7 +35,7 @@ def process_files2(files,modulo_id):
         if file.filename.endswith(".pdf"):
             content = read_pdf(file_path)
         elif file.filename.endswith(".csv"):
-            content = read_csv(file_path)
+            content = read_csv2(file_path)
         elif file.filename.endswith(".odt"):
             content = read_odt(file_path)
         else:
