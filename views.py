@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File,status,HTTPException ,Form
 from typing import List
 from controllers.file_processing import process_files,curso_modulo_up
-from controllers.document_queries import ask_about_document
+from controllers.document_queries import ask_about_document,ask_about_document2,ask_about_trascript
 from controllers.quiz_generation import generate_quiz
 from pydantic import BaseModel
 
@@ -10,6 +10,15 @@ router = APIRouter()
 class Curso(BaseModel): #serialize
     cursoname:str
     modulo:str
+
+    class Config:
+        orm_mode = True
+
+class Curso2(BaseModel): #serialize
+    curso_id:int
+    modulo_id:int
+    document_id:int
+    query:str
 
     class Config:
         orm_mode = True
@@ -32,6 +41,11 @@ def generate_quiz_endpoint(document_id: int):
 @router.post("/curso/",response_model=Curso,status_code=200)
 async def test(curso:Curso):
     return curso
+
+@router.post("/curso4/",response_model=Curso2,status_code=200)
+async def test(curso:Curso2):
+    response = ask_about_document2(curso.curso_id,curso.document_id,curso.query,curso.modulo_id)
+    return {"quiz": response}
 
 class FileUploadData(BaseModel):
     cursoname: str
