@@ -48,5 +48,5 @@ class Trascricao(Base):
     content = Column(String)
     vector = Column(String)
 
-#Base.metadata.drop_all(bind=engine)
+Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
