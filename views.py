@@ -42,10 +42,15 @@ def generate_quiz_endpoint(document_id: int):
 async def test(curso:Curso):
     return curso
 
-@router.post("/curso4/",response_model=Curso2,status_code=200)
-async def test(curso:Curso2):
-    response = ask_about_document2(curso.curso_id,curso.document_id,curso.query,curso.modulo_id)
-    return {"quiz": response}
+@router.post("/curso4/",status_code=status.HTTP_200_OK)
+async def test(
+    curso_id:int = Form(...),
+    modulo_id:int = Form(...),
+    document_id:int = Form(...),
+    query:str = Form(...),
+):
+    response = ask_about_document2(curso_id,document_id,query,modulo_id)
+    return response
 
 class FileUploadData(BaseModel):
     cursoname: str
@@ -85,4 +90,13 @@ async def curse2(
         raise HTTPException(status_code=400, detail="Nenhum arquivo enviado.")
     
     response = curso_modulo_up(files, cursoname, modulo)
+    return response
+
+@router.post("/trascpit/",status_code=status.HTTP_200_OK)
+async def trascopt(
+    modulo_id:int = Form(...),
+    question:str = Form(...),
+    uuid:str = Form(...),
+):
+    response = ask_about_trascript(modulo_id,uuid,question)
     return response

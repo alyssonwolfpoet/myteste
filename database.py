@@ -59,3 +59,7 @@ def get_document_modulo_by_id(modulo_id:int,doc_id):
     db = SessionLocal()
     return db.query(Document).filter(Document.modulo_id == modulo_id,Document.id == doc_id).first()
 
+def get_trascricao_modulo_Curso_by_id(modulo_id:int,uuid:str):
+    db = SessionLocal()
+    return db.query(Trascricao).filter(Trascricao.modelo_id == modulo_id,Trascricao.uuid == uuid,).first()
+
