@@ -13,3 +13,5 @@ pdfplumber
 python-multipart
 fastembed
 langchain-community
+langchain_ollama
+PyStemmer
