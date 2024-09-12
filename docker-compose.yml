@@ -1,0 +1,58 @@
+version: '3.9'
+
+services:
+  ollama-container:
+    container_name: ollama
+    build:
+      context: ./ollama
+      dockerfile: Dockerfile.ollama
+    ports:
+      - "8000:8000"
+    tty: true
+    #restart: always
+    volumes:
+      - ./ollama:/root/.ollama
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_HOST=0.0.0.0
+    networks:
+      - my_network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: alysson
+      POSTGRES_PASSWORD: senhabanco
+      POSTGRES_DB: item_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my_network
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi
+    container_name: fastapi
+    ports:
+      - "8001:80"
+    volumes:
+      - ./app:/app
+    depends_on:
+      - postgres
+      - ollama-container
+    environment:
+      DATABASE_URL: postgresql://alysson:senhabanco@postgres/item_db
+    networks:
+      - my_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  my_network:
+    driver: bridge

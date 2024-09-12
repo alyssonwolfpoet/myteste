@@ -1,0 +1,26 @@
+# Dockerfile.ollama
+FROM ollama/ollama:latest
+
+# Instalar curl
+RUN apt-get update && apt-get install -y curl
+
+# Define variáveis de ambiente
+ENV OLLAMA_KEEP_ALIVE=24h
+ENV OLLAMA_HOST=0.0.0.0
+
+# Define o diretório de trabalho
+WORKDIR /root/.ollama
+
+# Copia arquivos e configurações para o container
+COPY .ollama/ollama /root/.ollama
+
+# Copia o script de inicialização para o container
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# Torne o script executável
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+
+# Comando para iniciar o serviço e executar o script
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+RUN /usr/bin/ollama start
