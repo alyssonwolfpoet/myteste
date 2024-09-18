@@ -3,18 +3,20 @@ version: '3.9'
 services:
   ollama-container:
     container_name: ollama
+    # image: ollama/ollama:latest 
     build:
       context: ./ollama
       dockerfile: Dockerfile.ollama
     ports:
-      - "8000:8000"
+      - "11434:11434"
     tty: true
     #restart: always
     volumes:
-      - ./ollama:/root/.ollama
+      - ./ollama:/app/data
     environment:
       - OLLAMA_KEEP_ALIVE=24h
       - OLLAMA_HOST=0.0.0.0
+    command: serve
     networks:
       - my_network
 
@@ -38,7 +40,7 @@ services:
       dockerfile: Dockerfile.fastapi
     container_name: fastapi
     ports:
-      - "8001:80"
+      - "8000:80"
     volumes:
       - ./app:/app
     depends_on:

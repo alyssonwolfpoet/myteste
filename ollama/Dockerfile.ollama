@@ -12,15 +12,14 @@ ENV OLLAMA_HOST=0.0.0.0
 WORKDIR /root/.ollama
 
 # Copia arquivos e configurações para o container
-COPY .ollama/ollama /root/.ollama
+COPY . /root/.ollama
 
 # Copia o script de inicialização para o container
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 # Torne o script executável
 RUN chmod +x /usr/local/bin/entrypoint.sh
-
-
+EXPOSE 11434
 # Comando para iniciar o serviço e executar o script
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-RUN /usr/bin/ollama start
+#RUN /usr/bin/ollama start
