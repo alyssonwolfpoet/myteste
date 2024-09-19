@@ -1,21 +1,23 @@
 #!/bin/bash
 
-# Inicie o serviço Ollama em segundo plano
-/usr/bin/ollama start &
+set -e  # Faz o script falhar em caso de erro
+
+# Configurações
+OLLAMA_URL="http://localhost:11434"
+TIMEOUT=30
+CHECK_INTERVAL=5
 
 # Função para esperar que o serviço Ollama esteja disponível
 wait_for_service() {
-  local url="http://localhost:11434"
-  local timeout=30
   local start_time=$(date +%s)
 
-  while [[ $(($(date +%s) - start_time)) -lt timeout ]]; do
-    if curl -s "$url" > /dev/null; then
+  while [[ $(($(date +%s) - start_time)) -lt TIMEOUT ]]; do
+    if curl -s "$OLLAMA_URL" > /dev/null; then
       echo "Ollama está disponível."
       return 0
     fi
     echo "Esperando pelo Ollama..."
-    sleep 5
+    sleep $CHECK_INTERVAL
   done
 
   echo "Tempo limite para conectar ao Ollama excedido."
@@ -32,32 +34,36 @@ check_command_success() {
   fi
 }
 
+# Verificar se o Ollama está instalado
+if ! command -v /usr/bin/ollama &> /dev/null; then
+  echo "Ollama não está instalado. Saindo."
+  exit 1
+fi
+
+# Iniciar o serviço Ollama em segundo plano
+/usr/bin/ollama start &
+
 # Baixar os modelos necessários
 echo "Baixando modelos Ollama..."
-
-# Esperar o serviço Ollama ficar disponível
 wait_for_service
 
-# Execute os comandos para baixar os modelos
-# /usr/bin/ollama download llama3.1
-# check_command_success $? "Falha ao baixar o modelo llama3.1"
+# Array de modelos a serem baixados
+declare -a models=("llama3.1" "nomic-embed-text")
 
-# /usr/bin/ollama download nomic-embed-text
-# check_command_success $? "Falha ao baixar o modelo nomic-embed-text"
-
-# Alternativamente, você pode usar `ollama pull` se `download` não funcionar
-/usr/bin/ollama pull llama3.1
-#check_command_success $? "Falha ao puxar o modelo llama3.1"
-/usr/bin/ollama pull nomic-embed-text
-#check_command_success $? "Falha ao puxar o modelo nomic-embed-text"
-
-
+for model in "${models[@]}"; do
+  echo "Puxando o modelo $model..."
+  /usr/bin/ollama pull "$model"
+  check_command_success $? "Falha ao puxar o modelo $model"
+done
 
 # Aguardar um momento para garantir que o serviço esteja completamente iniciado
 sleep 10
 
-#echo "passou aqui"
-#/usr/bin/ollama stop
+# Capturar SIGTERM para encerrar o serviço corretamente
+trap 'echo "Encerrando..."; /usr/bin/ollama stop; exit' SIGTERM
+
+# Manter o script em execução
+wait
 
 # Executar o comando padrão do contêiner, se houver
-#exec "$@"
+exec "$@"
