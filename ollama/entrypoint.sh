@@ -56,8 +56,8 @@ wait_for_service
 # Aguardar um momento para garantir que o serviço esteja completamente iniciado
 sleep 10
 
-echo "passou aqui"
-/usr/bin/ollama stop
+#echo "passou aqui"
+#/usr/bin/ollama stop
 
 # Executar o comando padrão do contêiner, se houver
-exec "$@"
+#exec "$@"
